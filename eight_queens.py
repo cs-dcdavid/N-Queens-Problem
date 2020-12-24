@@ -112,6 +112,11 @@ class Queen:
     def intersects_with(self, queen2):
         return Queen.same_position(self, queen2) or Queen.same_rank(self, queen2) or Queen.same_file(self, queen2) or Queen.same_rising_diagonal(self, queen2) or Queen.same_falling_diagonal(self, queen2)
 
+
+q1 = Queen('h1')
+q2 = Queen('g2')
+
 print(q1.intersects_with(q2))
+
 
 
