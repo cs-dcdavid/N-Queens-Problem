@@ -26,7 +26,7 @@ class Queen:
     
     # Check for intersections in the file, rank, and both diagonals
     def intersects_with(self, queen2):
-        
+        pass
 
 q1 = Queen('a3')
 q2 = Queen('a3')
