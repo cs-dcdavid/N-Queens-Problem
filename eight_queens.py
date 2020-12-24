@@ -1,3 +1,5 @@
+from itertools import permutations  
+
 # A Chessboard is made up of 
 #    columns (called "files" that are letters from a to g) and 
 #    row (called "ranks" that are numbers from 1 to 8). Therefore,
@@ -109,14 +111,28 @@ class Queen:
     
     # --------------------------------------------------------
     # Check for intersections in the file, rank, and both diagonals
-    def intersects_with(self, queen2):
-        return Queen.same_position(self, queen2) or Queen.same_rank(self, queen2) or Queen.same_file(self, queen2) or Queen.same_rising_diagonal(self, queen2) or Queen.same_falling_diagonal(self, queen2)
+    @classmethod
+    def intersects_with(cls, queen1, queen2):
+        return Queen.same_position(queen1, queen2) or Queen.same_rank(queen1, queen2) or Queen.same_file(queen1, queen2) or Queen.same_rising_diagonal(queen1, queen2) or Queen.same_falling_diagonal(queen1, queen2)
+    
+    # Given a list of queens, figure out whether it would be a solution
+    # to the n-queens problem
+    @classmethod
+    def is_a_solution(cls, queens):
+        bools = []
+        for q1 in queens:
+            for q2 in queens:
+                if q1.position != q2.position:
+                    bools.append(Queen.intersects_with(q1,q2))
+        
+        is_a_solution = True
+        for b in bools:
+            is_a_solution = is_a_solution and not b
+            
+        return is_a_solution
 
-
-q1 = Queen('h1')
-q2 = Queen('g2')
-
-print(q1.intersects_with(q2))
+queens = [Queen('a2'), Queen('b4'), Queen('c6'), Queen('d8'), Queen('e3'), Queen('f1'), Queen('g7'), Queen('h5')]
+print(Queen.is_a_solution(queens))
 
 
 
