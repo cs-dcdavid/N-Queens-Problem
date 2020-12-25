@@ -1,6 +1,9 @@
 from itertools import product # to generate all the squares in a chessboard
-from random import choice # to randomly generate n-queens
+from random import choice # to randomly generate n-Queens
+from random import shuffle # to randomly generate a solution
 from math import factorial # to calculate total number of possibilities
+
+nodes_expanded = 0
 
 # The n-Queens puzzle is the problem of placing 
 # n-Queens in an n-by-n chessboard
@@ -11,7 +14,7 @@ class Chessboard:
         self.ranks = self.generate_ranks()
         self.squares = self.generate_squares()
     
-    # int -> [file-a, file-b, ... nth-file]
+    # Chessboard -> [file-a, file-b, ... nth-file]
     def generate_files(self):
         files = [
             chr(97 + i)
@@ -19,7 +22,7 @@ class Chessboard:
         ]
         return files
     
-    # int -> [rank-1, rank-2, ... rank-n]
+    # Chessboard -> [rank-1, rank-2, ... rank-n]
     def generate_ranks(self):
         ranks = [
             i + 1
@@ -27,6 +30,7 @@ class Chessboard:
         ]
         return ranks
         
+    # Chessboard -> [square-a1, square-a2, ..., square-b1, square-b2, ..., nth-square-n]
     def generate_squares(self):
         squares = [
             r[0] + str(r[1])
@@ -34,6 +38,7 @@ class Chessboard:
         ]
         return squares
     
+    # Chessboard -> [Queen-1, Queen-2, ..., Queen-n]
     def generate_n_queens(self):
         queens = []
         for _ in range(self.n):
@@ -41,10 +46,43 @@ class Chessboard:
             if q not in queens:
                 queens.append(q)
         return queens
-        
+    
+    # Recursive method where 
+    #    - assignments is [Queen-1, Queen2, ..., Queen-n]
+    #    - unassigned is [square-a1, square-a2, ..., nth-square-n]
+    def generate_solution(self, assignments, unassigned):
+        if len(assignments) == self.n:
+            return assignments
+        # --------------------------------------------------------------------
+        # Optimization of up to log_2(n) compared to basic backtracking search
+        local_unassigned = unassigned.copy()
+        conflicts = []
+        for u in local_unassigned:
+            q = Queen(u, self)
+            for a in assignments:
+                if q.intersects_with(a):
+                    conflicts.append(u)
+        for c in conflicts:
+            local_unassigned.remove(c)
+        shuffle(local_unassigned)
+        # --------------------------------------------------------------------
+        for u in local_unassigned:
+            global nodes_expanded
+            nodes_expanded += 1
+            
+            local_assignments = assignments.copy()
+            local_assignments.append(Queen(u, self))
+            if Queen.is_a_partial_solution(local_assignments):
+                result = self.generate_solution(local_assignments, local_unassigned)
+                if result is not None:
+                    return result
+        return None
+    
+    # Chessboard -> int
     def get_length_possibilities(self):
         return (factorial(len(self.squares)) / (factorial(self.n) * factorial(len(self.squares) - self.n)))
-        
+    
+    # Chessboard -> int
     def get_length_fundamental_solutions(self):
         if self.n > 27:
             print("ERROR: The problem size is too big. The n-Queens puzzle is only solved for up to n=27.")
@@ -61,7 +99,8 @@ class Chessboard:
         275986683743434, 2789712466510289, 29363495934315694
         ]
         return fundamental_solutions[self.n]
-        
+    
+    # Chessboard -> int
     def get_length_all_solutions(self):
         if self.n > 27:
             print("ERROR: The problem size is too big. The n-Queens puzzle is only solved for up to n=27.")
@@ -82,14 +121,15 @@ class Chessboard:
 # A Chessboard is made up of 
 #    columns (called "files" that are letters from a to g) and 
 #    row (called "ranks" that are numbers from 1 to 8). Therefore,
-#    if a chess piece is said to be in "e4",
+#    if a Queen is said to be in "e4",
 #    then it is in the "e file" (5th column) and "4th rank" (4th column)
 class Queen:
     def __init__(self, position, board):
         self.position = position
-        self.file = position[0]
-        self.rank = int(position[1])
         self.board = board
+    
+    def __str__(self):
+        return '{self.position} Queen'.format(self=self)
     
     # Check for two queens in the same position
     # Queen, Queen -> bool
@@ -103,19 +143,19 @@ class Queen:
     #              -> true (if the two queens intersect in their files)
     #              -> false (if the two queens never intersect in their files)
     def on_same_file(self, q2):
-        return self.file == q2.file
+        return self.position[0] == q2.position[0]
     
     # Check for intersections in the rank "—"
     # Queen, Queen -> bool
     #              -> true (if the two queens intersect in their ranks)
     #              -> false (if the two queens never intersect in their ranks)
     def on_same_rank(self, q2):
-        return self.rank == q2.rank
+        return self.position[1] == q2.position[1]
 
     # Increment the file letter (going up alphabetically)
     # Queen -> [file-a, file-b, ..., nth-file]
     def get_next_files(self):
-        f = self.file
+        f = self.position[0]
         index = self.board.files.index(f)
         files = self.board.files[index+1:]
         return files
@@ -123,7 +163,7 @@ class Queen:
     # Decrement the file letter (going back alphabetically)
     # Queen -> [file-a, file-b, ..., nth-file]
     def get_prev_files(self):
-        f = self.file
+        f = self.position[0]
         index = self.board.files.index(f)
         files = self.board.files[:index]
         files.reverse() # WHY REVERSE? Search for "WHY REVERSE" to jump to the code + explanation
@@ -132,7 +172,7 @@ class Queen:
     # Increment the rank number
     # Queen -> [rank-1, rank-2, ... rank-n]
     def get_next_ranks(self):
-        r = self.rank
+        r = int(self.position[1])
         index = self.board.ranks.index(r)
         ranks = self.board.ranks[index+1:]
         return ranks
@@ -140,7 +180,7 @@ class Queen:
     # Decrement the rank number
     # Queen -> [rank-1, rank-2, ... rank-n]
     def get_prev_ranks(self):
-        r = self.rank
+        r = int(self.position[1])
         index = self.board.ranks.index(r)
         ranks = self.board.ranks[:index]
         ranks.reverse() # WHY REVERSE? Search for "WHY REVERSE" to jump to the code + explanation
@@ -229,8 +269,27 @@ class Queen:
             print("ERROR: The queens (", self.position, ") and (", q2.position,") are not on the same board.")
             return None
         return self.on_same_position(q2) or self.on_same_rank(q2) or self.on_same_file(q2) or self.on_same_rising_diagonal(q2) or self.on_same_falling_diagonal(q2)
+        
+    # Given a list of queens, figure out whether it could be a solution to the n-Queens problem
+    # [Queen-1, Queen-2, ..., Queen-n] -> bool
+    #                                  -> true (if all queens do not intersect in any direction)
+    #                                  -> false (if there are queens that intersect in some direction)
+    @staticmethod
+    def is_a_partial_solution(queens):
+        bools = [
+            q1.intersects_with(q2)
+            for q1 in queens
+            for q2 in queens
+            if q1.position != q2.position
+        ]
+        
+        is_a_solution = True
+        for b in bools:
+            is_a_solution = is_a_solution and not b
+            
+        return is_a_solution
     
-    # Given a list of queens, figure out whether it would be a solution to the n-queens problem
+    # Given a list of queens, figure out whether it would be a solution to the n-Queens problem
     # [Queen-1, Queen-2, ..., Queen-n] -> bool
     #                                  -> true (if all queens do not intersect in any direction)
     #                                  -> false (if there are queens that intersect in some direction)
@@ -257,6 +316,9 @@ class Queen:
 
 cb = Chessboard(8)
 queens = [Queen('a2', cb), Queen('b4', cb), Queen('c6', cb), Queen('d8', cb), Queen('e3', cb), Queen('f1', cb), Queen('g7', cb), Queen('h5', cb)]
-print(Queen.is_a_solution(queens))
+#print(Queen.is_a_solution(queens))
 
-print(cb.get_length_possibilities())
+#print(nodes_expanded)
+cb2 = Chessboard(8)
+print([str(q) for q in cb2.generate_solution([], cb2.squares)])
+print(nodes_expanded)
