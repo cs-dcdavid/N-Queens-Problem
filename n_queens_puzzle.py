@@ -1,7 +1,7 @@
 from itertools import product # to generate all the squares in a chessboard
 from random import choice # to randomly generate n-Queens
 from random import shuffle # to randomly generate a solution
-from math import factorial # to calculate total number of possibilities
+from math import comb # to calculate total number of possibilities
 
 nodes_expanded = 0
 
@@ -13,7 +13,96 @@ class Chessboard:
         self.files = self.generate_files()
         self.ranks = self.generate_ranks()
         self.squares = self.generate_squares()
+        self.queens = []
     
+    # Treat this as a black box, trying to understand this method is counter-productive.
+    def __str__(self):
+        # Prepare the squares for processing
+        one_dimensional = self.squares.copy()
+        one_dimensional.sort(key=lambda x:x[1])
+        two_dimensional = [one_dimensional[i:i+self.n] for i in range(0, len(one_dimensional),self.n)]
+        two_dimensional.reverse()
+
+        file_labels = self.files.copy()
+        rank_labels = self.ranks.copy()
+        rank_labels.reverse()
+
+        def construct_row():
+            spaces = "   "
+            double_bars = "═══"
+            single_bars = "───"
+
+            # Construct bottom labels
+            bottom_labels = ""
+
+            # Construct horizontal dividers
+            horizontal_divider = ""
+
+            for i in range(self.n):
+                if i == 0:
+                    horizontal_divider += " ╟" + single_bars
+                else:
+                    horizontal_divider += "│" + single_bars
+                if i == self.n-1:
+                    horizontal_divider += "╢\n"
+            
+            # Construct top border, bottom border, inner-rows
+            top_border, bottom_border, inner_rows = "", "", ""
+            for i in range(self.n):
+                for j in range(self.n):
+                    if j == 0:
+                        inner_rows += str(rank_labels[i]) + "║" + spaces
+                    else:
+                        inner_rows += "│" + spaces
+                    if j == self.n-1:
+                        inner_rows += "║\n"
+                        if i != self.n-1: 
+                            inner_rows += horizontal_divider
+                if i == 0:
+                    top_border += " ╔" + double_bars
+                    bottom_border += " ╚" + double_bars
+                else:
+                    top_border += "╤" + double_bars
+                    bottom_border += "╧" + double_bars
+                if i == self.n-1:
+                    top_border += "╗\n"
+                    bottom_border += "╝\n"
+                bottom_labels += spaces + file_labels[i]
+            
+            return top_border + inner_rows + bottom_border + bottom_labels
+
+        def construct_board():
+            start = ""
+            for i in range(self.n):
+                pass
+
+        if self.n == 1:
+            string =""" ╔═══╗\n%d║   ║\n ╚═══╝\n   %s """ % (self.ranks[0], self.files[0])
+
+        else:
+            row = construct_row()
+            """
+            string= ╔═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╗
+h║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+g║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+f║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+e║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+d║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+c║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+b║   │   │   │   │   │   │   │   ║
+ ╟───┼───┼───┼───┼───┼───┼───┼───╢
+a║   │   │   │   │   │   │   │   ║
+ ╚═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝
+   1   2   3   4   5   6   7   8
+            """
+        return row.format(self=self)
+
     # Chessboard -> [file-a, file-b, ... nth-file]
     def generate_files(self):
         files = [
@@ -52,6 +141,8 @@ class Chessboard:
     #    - unassigned is [square-a1, square-a2, ..., nth-square-n]
     def generate_solution(self, assignments, unassigned):
         if len(assignments) == self.n:
+            assignments.sort(key=lambda x: x.position)
+            self.queens = assignments
             return assignments
         # --------------------------------------------------------------------
         # Optimization of up to log_2(n) compared to basic backtracking search
@@ -80,7 +171,7 @@ class Chessboard:
     
     # Chessboard -> int
     def get_length_possibilities(self):
-        return (factorial(len(self.squares)) / (factorial(self.n) * factorial(len(self.squares) - self.n)))
+        return comb(len(self.squares), self.n)
     
     # Chessboard -> int
     def get_length_fundamental_solutions(self):
@@ -313,12 +404,34 @@ class Queen:
             
         return is_a_solution
 
+def output(n):
+    cb = Chessboard(n)
+    output = cb.generate_solution([], cb.squares)
+    print([str(o) for o in output])
+    print(cb)
+    return output
 
-cb = Chessboard(8)
-queens = [Queen('a2', cb), Queen('b4', cb), Queen('c6', cb), Queen('d8', cb), Queen('e3', cb), Queen('f1', cb), Queen('g7', cb), Queen('h5', cb)]
-#print(Queen.is_a_solution(queens))
+if __name__ == "__main__":
+    print('This is a Python program that finds a solution to the n-Queens puzzle')
+    print('wherein \'n\' is the number of queens to be placed in an n-by-n board. \n')
 
-#print(nodes_expanded)
-cb2 = Chessboard(8)
-print([str(q) for q in cb2.generate_solution([], cb2.squares)])
-print(nodes_expanded)
+    print('Type \'exit\' at any time to stop the program. \n')
+
+    n = ''
+    while(True):
+        print('What integer \'n\' would you like to test?: ', end='')
+        n = input()
+        if n == 'exit':
+            break
+        else:
+            try: n = int(n)
+            except ValueError: print('ERROR: That input is not an integer. Please try again. ', end='')
+            output(n)
+
+
+# TODO: Organize output (solutions, possibilities, nodes expanded, num of fundamental and all solutions)
+# TODO: Optimize backtracking search further
+# TODO: Ask for some input (board size)
+# TODO: Apply a text-based GUI
+# TODO: Option to return ALL solutions
+# TODO: Handle when strings when there's no solution (i.e. n=2, n=3)
