@@ -6,8 +6,12 @@ Using backtracking search with forward checking, this Python program by DC David
 ### Sample output:
 <img src="/images/step9.png" width="400" height="300">
 
+<br>
+
 # Overview of the n-Queens Puzzle
 The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n chessboard so that no two queens threaten each other; thus, a solution requires that no two queens share the same row, column, or diagonal. Solutions exist for all natural numbers n with the exception of n = 2 and n = 3. The 8-Queens puzzle is a more specific example of the n-Queens problem of placing eight non-attacking queens on an 8×8 chessboard.
+
+<br>
 
 # Installation and Usage
 ### Download the program:
@@ -31,14 +35,12 @@ The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n ches
     <summary> Optionally, choose a directory to save the folder. Select 'Extract.' </summary>
     <img src="/images/step5.png">
   </details>
-<br>
 
 ### Run the program:
   <details>
     <summary> Run the program by selecting 'n_queens_puzzle' or 'n_queens_puzzle.py.' </summary>
     <img src="/images/step6.png">
   </details>
-<br>
 
 ### Use the program:
   <details>
