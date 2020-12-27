@@ -31,7 +31,6 @@ The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n ches
     <summary> Optionally, choose a directory to save the folder. Select 'Extract.' </summary>
     <img src="/images/step5.png">
   </details>
-  
 <br>
 
 ### Run the program:
@@ -39,7 +38,6 @@ The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n ches
     <summary> Run the program by selecting 'n_queens_puzzle' or 'n_queens_puzzle.py.' </summary>
     <img src="/images/step6.png">
   </details>
-  
 <br>
 
 ### Use the program:
