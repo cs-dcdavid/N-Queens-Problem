@@ -17,7 +17,7 @@ The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n ches
 ### Download the program:
   <details>
     <summary> Go to the <a href="https://github.com/cs-dcdavid/n-Queens-Puzzle">n-Queens Puzzle Github Repository</a>. </summary>
-    <img src="/images/step1.png">
+    <img src="/images/step1.PNG">
   </details>
   <details>
     <summary> Click on 'Code' and then 'Download ZIP'. </summary>
