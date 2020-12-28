@@ -1,6 +1,6 @@
-<img src="/images/Personal Logo, Design 1.0.png" align="right" width="225" height="150"/>
-
-[![Logo](/images/Personal Logo, Design 1.0.png)](https://davidcyrildavid.com)
+<a href="http://google.com">
+  <img src="/images/Personal Logo, Design 1.0.png" align="right" width="225" height="150"/>
+</a>
 
 # Basic Overview [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 Using backtracking search with forward checking, this Python program by DC David finds a solution for the n-Queens Puzzle for up to n=52.
