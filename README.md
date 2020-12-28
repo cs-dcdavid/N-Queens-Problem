@@ -1,5 +1,3 @@
-
-
 # Basic Overview [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 Using backtracking search with forward checking, this Python program by DC David finds a solution for the n-Queens Puzzle for up to n=52.
 
