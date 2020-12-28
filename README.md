@@ -1,4 +1,4 @@
-<a href="http://google.com">
+<a href="https://davidcyrildavid.com/">
   <img src="/images/Personal Logo, Design 1.0.png" align="right" width="225" height="150"/>
 </a>
 
