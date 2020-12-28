@@ -42,7 +42,7 @@ The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n ches
     <img src="/images/step6.png">
   </details>
 
-### Use the program by following the prompt:
+### Use the program by following the prompt inside it:
   <details>
     <summary> Typing-in any integer 'n' from 1 to 52 to get a solution to the n-Queens puzzle. </summary>
     <img src="/images/step7.png" width="900" height="600">
