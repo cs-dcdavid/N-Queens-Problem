@@ -4,7 +4,7 @@
 Using backtracking search with forward checking, this Python program by DC David finds a solution for the n-Queens Puzzle for up to n=52.
 
 ### Sample output:
-<img src="/images/step9.png" width="900" height="600">
+<a href="davidcyrildavid.com"><img src="/images/step9.png" width="900" height="600"></a>
 
 <br>
 
