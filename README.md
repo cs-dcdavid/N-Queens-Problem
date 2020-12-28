@@ -45,7 +45,7 @@ The n-Queens puzzle is the problem of placing 'n' chess queens on an n-by-n ches
 ### Use the program:
   <details>
     <summary> Typing-in any integer 'n' from 1 to 52 to get a solution to the n-Queens puzzle. </summary>
-    <img src="/images/step7.png" width="400" height="300">
+    <img src="/images/step7.png" width="900" height="600">
   </details>
   <details>
     <summary> Typing-in '8' gets a solution to the 8-Queens puzzle. </summary>
